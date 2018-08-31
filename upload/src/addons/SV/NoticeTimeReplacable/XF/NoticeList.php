@@ -7,6 +7,12 @@ class NoticeList extends XFCP_NoticeList
     /** @var null|int */
     protected $svNow = null;
 
+    /**
+     * @param string $key
+     * @param string $type
+     * @param string $message
+     * @param array  $override
+     */
     public function addNotice($key, $type, $message, array $override = [])
     {
         parent::addNotice($key, $type, $message, $override);
@@ -71,74 +77,46 @@ class NoticeList extends XFCP_NoticeList
         return [$absolute, $relative];
     }
 
+    /**
+     * @param array  $format
+     * @param int    $value
+     * @param string $formatString
+     * @param string $phrase
+     */
+    protected function appendDatePart(&$format, $value, $formatString, $phrase)
+    {
+        if ($value)
+        {
+            $format[] = $formatString;
+            $format[] = \XF::phraseDeferred($phrase . ($value == 1 ? '' : 's'));
+        }
+    }
+
+    /**
+     * @param \DateTime $now
+     * @param \DateTime $other
+     * @return string
+     */
     public function getRelativeDate(\DateTime $now, \DateTime $other)
     {
         $interval = $other->diff($now);
-        $format = [];
-        if ($interval->y)
+        if (!$interval)
         {
-            if ($interval->y == 1)
-            {
-                $format[] = '%y year';
-            }
-            else
-            {
-                $format[] = '%y years';
-            }
-        }
-        if ($interval->m)
-        {
-            if ($interval->m == 1)
-            {
-                $format[] = '%m month';
-            }
-            else
-            {
-                $format[] = '%m months';
-            }
-        }
-        if ($interval->d)
-        {
-            if ($interval->d == 1)
-            {
-                $format[] = '%d day';
-            }
-            else
-            {
-                $format[] = '%d days';
-            }
-        }
-        if ($interval->h)
-        {
-            if ($interval->h == 1)
-            {
-                $format[] = '%h hour';
-            }
-            else
-            {
-                $format[] = '%h hours';
-            }
-        }
-        if ($interval->i)
-        {
-            if ($interval->i == 1)
-            {
-                $format[] = '%i minute';
-            }
-            else
-            {
-                $format[] = '%i minutes';
-            }
-        }
-        if ($interval->s == 1)
-        {
-            $format[] = '%s second';
-        }
-        else
-        {
-            $format[] = '%s seconds';
+            return '';
         }
 
-        return $interval->format(join(', ', $format));
+        $format = [];
+        $this->appendDatePart($format, $interval->y, '%y ', 'year');
+        $this->appendDatePart($format, $interval->m, '%m ', 'month');
+        $this->appendDatePart($format, $interval->d, '%d ', 'day');
+        $this->appendDatePart($format, $interval->h, '%h ', 'hour');
+        $this->appendDatePart($format, $interval->i, '%i ', 'minute');
+        $this->appendDatePart($format, $interval->s, '%s ', 'second');
+
+        $f = intval($interval->f);
+
+        return "<span class='time-notice' data-seconds-diff='{$f}'>" .
+            $interval->format(join(', ', $format)) .
+            "</span>";
     }
 }
