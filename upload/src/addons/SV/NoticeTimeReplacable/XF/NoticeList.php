@@ -2,84 +2,143 @@
 
 namespace SV\NoticeTime\XF;
 
-use SV\NoticeTime\Repository\NoticeTime;
-
 class NoticeList extends XFCP_NoticeList
 {
+    /** @var null|int */
     protected $svNow = null;
 
     public function addNotice($key, $type, $message, array $override = [])
     {
         parent::addNotice($key, $type, $message, $override);
 
-        $message = $this->notices[$type][$key]['message'];
 
-        $startAbsolute = $startRelative = $beforeAbsolute = $beforeRelative = '';
-
+        $tokens = [];
         foreach ($override['page_criteria'] AS $criterion)
         {
-            if ($criterion['rule'] == 'after')
+            switch ($criterion['rule'])
             {
-                $ymd = $criterion['data']['ymd'];
-                $timeHour = $criterion['data']['hh'];
-                $timeMinute = $criterion['data']['mm'];
-
-                if ($criterion['data']['user_tz'])
-                {
-                    $timezone = new \DateTimeZone(\XF::visitor()->timezone);
-                }
-                else
-                {
-                    $timezone = new \DateTimeZone($criterion['data']['timezone']);
-                }
-
-                $timeStamp = new \DateTime("{$ymd}T$timeHour:$timeMinute", $timezone);
-
-                $startAbsolute = \XF::language()->dateTime($timeStamp);
-                $startRelative = NoticeTime::getRelativeDate($this->getNowDateTime(), $timeStamp);
-            }
-
-            if ($criterion['rule'] == 'before')
-            {
-                $ymd = $criterion['data']['ymd'];
-                $timeHour = $criterion['data']['hh'];
-                $timeMinute = $criterion['data']['mm'];
-
-                if ($criterion['data']['user_tz'])
-                {
-                    $timezone = new \DateTimeZone(\XF::visitor()->timezone);
-                }
-                else
-                {
-                    $timezone = new \DateTimeZone($criterion['data']['timezone']);
-                }
-
-                $timeStamp = new \DateTime("{$ymd}T$timeHour:$timeMinute", $timezone);
-
-                $beforeAbsolute = \XF::language()->dateTime($timeStamp);
-                $beforeRelative = NoticeTime::getRelativeDate($this->getNowDateTime(), $timeStamp);
+                case 'after':
+                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
+                    $tokens['{time_end:absolute}'] = $absolute;
+                    $tokens['{time_end:relative}'] = $relative;
+                    break;
+                case 'before':
+                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
+                    $tokens['{time_start:absolute}'] = $absolute;
+                    $tokens['{time_start:relative}'] = $relative;
+                    break;
             }
         }
 
-        $tokens = [
-            '{time_start:absolute}' => $startAbsolute,
-            '{time_start:relative}' => $startRelative,
-            '{time_end:absolute}'   => $beforeAbsolute,
-            '{time_end:relative}'   => $beforeRelative
-        ];
+        if ($tokens)
+        {
+            $message = $this->notices[$type][$key]['message'];
 
-        $message = strtr($message, $tokens);
+            $message = strtr($message, $tokens);
 
-        $this->notices[$type][$key]['message'] = $message;
+            $this->notices[$type][$key]['message'] = $message;
+        }
     }
 
-    protected function getNowDateTime()
+    /**
+     * @param array $criterion
+     * @return array
+     */
+    protected function getAbsoluteRelativeTimeDiff(array $criterion)
     {
+        $ymd = $criterion['data']['ymd'];
+        $timeHour = $criterion['data']['hh'];
+        $timeMinute = $criterion['data']['mm'];
+
+        if ($criterion['data']['user_tz'])
+        {
+            $timezone = new \DateTimeZone(\XF::visitor()->timezone);
+        }
+        else
+        {
+            $timezone = new \DateTimeZone($criterion['data']['timezone']);
+        }
+
+        $timeStamp = new \DateTime("{$ymd}T$timeHour:$timeMinute", $timezone);
         if ($this->svNow === null)
         {
             $this->svNow = new \DateTime();
         }
 
-        return $this->svNow;
+        $absolute = \XF::language()->dateTime($timeStamp);
+        $relative = $this->getRelativeDate($this->svNow, $timeStamp);
+
+        return [$absolute, $relative];
+    }
+
+    public function getRelativeDate(\DateTime $now, \DateTime $other)
+    {
+        $interval = $other->diff($now);
+        $format = [];
+        if ($interval->y)
+        {
+            if ($interval->y == 1)
+            {
+                $format[] = '%y year';
+            }
+            else
+            {
+                $format[] = '%y years';
+            }
+        }
+        if ($interval->m)
+        {
+            if ($interval->m == 1)
+            {
+                $format[] = '%m month';
+            }
+            else
+            {
+                $format[] = '%m months';
+            }
+        }
+        if ($interval->d)
+        {
+            if ($interval->d == 1)
+            {
+                $format[] = '%d day';
+            }
+            else
+            {
+                $format[] = '%d days';
+            }
+        }
+        if ($interval->h)
+        {
+            if ($interval->h == 1)
+            {
+                $format[] = '%h hour';
+            }
+            else
+            {
+                $format[] = '%h hours';
+            }
+        }
+        if ($interval->i)
+        {
+            if ($interval->i == 1)
+            {
+                $format[] = '%i minute';
+            }
+            else
+            {
+                $format[] = '%i minutes';
+            }
+        }
+        if ($interval->s == 1)
+        {
+            $format[] = '%s second';
+        }
+        else
+        {
+            $format[] = '%s seconds';
+        }
+
+        return $interval->format(join(', ', $format));
     }
 }
