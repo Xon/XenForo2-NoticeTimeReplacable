@@ -87,8 +87,7 @@ class NoticeList extends XFCP_NoticeList
     {
         if ($value)
         {
-            $format[] = $formatString;
-            $format[] = \XF::phraseDeferred($phrase . ($value == 1 ? '' : 's'));
+            $format[] = [$formatString, \XF::phrase($phrase . ($value == 1 ? '' : 's'))];
         }
     }
 
@@ -113,10 +112,25 @@ class NoticeList extends XFCP_NoticeList
         $this->appendDatePart($format, $interval->i, '%i ', 'minute');
         $this->appendDatePart($format, $interval->s, '%s ', 'second');
 
-        $f = intval($interval->f);
+        $f = intval($now->getTimestamp() - $other->getTimestamp());
+        if ($f)
+        {
+            foreach($format as &$s)
+            {
+                if (is_array($s))
+                {
+                    $s = join($s);
+                }
+            }
+            $s = $interval->format(join(', ', $format));
+        }
+        else
+        {
+            $s = '0 ' . \XF::phrase('seconds');
+        }
 
         return "<span class='time-notice' data-seconds-diff='{$f}'>" .
-            $interval->format(join(', ', $format)) .
+             $s .
             "</span>";
     }
 }
