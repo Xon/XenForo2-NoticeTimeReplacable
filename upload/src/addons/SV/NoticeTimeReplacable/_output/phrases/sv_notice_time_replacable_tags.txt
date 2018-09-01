@@ -1,0 +1,3 @@
+<br/>
+If a start time is set the following time-related replacable can be used: <b>{time_start:absolute}</b> and <b>{time_start:relative}</b><br/>
+If a end time is set the following time-related replacable can be used: <b>{time_end:absolute}</b> and <b>{time_end:relative}</b>

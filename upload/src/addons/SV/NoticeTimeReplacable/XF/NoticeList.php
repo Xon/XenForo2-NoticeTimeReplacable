@@ -1,6 +1,6 @@
 <?php
 
-namespace SV\NoticeTime\XF;
+namespace SV\NoticeTimeReplacable\XF;
 
 class NoticeList extends XFCP_NoticeList
 {
