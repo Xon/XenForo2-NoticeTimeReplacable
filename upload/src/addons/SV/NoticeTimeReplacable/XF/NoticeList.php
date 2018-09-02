@@ -17,6 +17,10 @@ class NoticeList extends XFCP_NoticeList
     {
         parent::addNotice($key, $type, $message, $override);
 
+        if (empty($override['page_criteria']))
+        {
+            return;
+        }
 
         $tokens = [];
         foreach ($override['page_criteria'] AS $criterion)
