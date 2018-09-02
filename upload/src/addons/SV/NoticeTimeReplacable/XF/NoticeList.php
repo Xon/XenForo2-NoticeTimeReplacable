@@ -25,13 +25,13 @@ class NoticeList extends XFCP_NoticeList
             {
                 case 'after':
                     list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
-                    $tokens['{time_end:absolute}'] = $absolute;
-                    $tokens['{time_end:relative}'] = $relative;
+                    $tokens['{time_start:absolute}'] = $absolute;
+                    $tokens['{time_start:relative}'] = $relative;
                     break;
                 case 'before':
                     list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
-                    $tokens['{time_start:absolute}'] = $absolute;
-                    $tokens['{time_start:relative}'] = $relative;
+                    $tokens['{time_end:absolute}'] = $absolute;
+                    $tokens['{time_end:relative}'] = $relative;
                     break;
             }
         }
