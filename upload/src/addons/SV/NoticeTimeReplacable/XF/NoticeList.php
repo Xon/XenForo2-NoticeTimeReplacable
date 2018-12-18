@@ -91,9 +91,10 @@ class NoticeList extends XFCP_NoticeList
     {
         if ($value === 1)
         {
-            $format[] = [$formatString, \XF::phrase($phrase)];
+            //$format[] = [$formatString, \XF::phrase($phrase)];
+            $format[] = \XF::phrase('time.'. $phrase .'s', ['count' => $value]);
         }
-        if ($value > 1)
+        else if ($value > 1)
         {
             $format[] = \XF::phrase('time.'. $phrase .'s', ['count' => $value]);
         }
@@ -134,7 +135,7 @@ class NoticeList extends XFCP_NoticeList
         }
         else
         {
-            $s = '0 ' . \XF::phrase('seconds');
+            $s = '0 ' . \XF::phrase('time.seconds');
         }
 
         return "<span class='time-notice' data-seconds-diff='{$f}'>" .
