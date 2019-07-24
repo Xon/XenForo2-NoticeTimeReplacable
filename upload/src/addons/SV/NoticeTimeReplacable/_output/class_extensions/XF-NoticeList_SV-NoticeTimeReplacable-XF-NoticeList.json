@@ -1,6 +1,6 @@
 {
     "from_class": "XF\\NoticeList",
     "to_class": "SV\\NoticeTimeReplacable\\XF\\NoticeList",
-    "execute_order": 10,
+    "execute_order": 6627,
     "active": true
 }
