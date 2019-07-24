@@ -98,6 +98,7 @@ class NoticeList extends XFCP_NoticeList
      */
     protected function appendDatePart(&$format, $value, $formatString, $phrase)
     {
+        $value = (int)$value;
         if ($value === 1)
         {
             $format[] = \XF::phrase('time.' . $phrase, ['count' => $value]);
@@ -106,7 +107,7 @@ class NoticeList extends XFCP_NoticeList
         {
             $format[] = \XF::phrase('time.' . $phrase . 's', ['count' => $value]);
         }
-        else
+        else if ($value < 0)
         {
             $format[] = [$formatString, \XF::phrase($phrase)];
         }
