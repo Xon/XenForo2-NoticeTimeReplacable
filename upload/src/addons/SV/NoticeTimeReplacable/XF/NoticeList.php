@@ -11,7 +11,7 @@ class NoticeList extends XFCP_NoticeList
     {
         $tokens = parent::getTokens();
 
-        $tokens['user_id'] = $this->user->user_id;
+        $tokens['{user_id}'] = $this->user->user_id;
 
         return $tokens;
     }
