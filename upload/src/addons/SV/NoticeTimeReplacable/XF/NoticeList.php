@@ -84,7 +84,7 @@ class NoticeList extends XFCP_NoticeList
             $this->svNow = new \DateTime();
         }
 
-        $absolute = \XF::language()->dateTime($timeStamp);
+        $absolute = \XF::language()->dateTime($timeStamp->getTimestamp());
         $relative = $this->getRelativeDate($this->svNow, $timeStamp);
 
         return [$absolute, $relative];
