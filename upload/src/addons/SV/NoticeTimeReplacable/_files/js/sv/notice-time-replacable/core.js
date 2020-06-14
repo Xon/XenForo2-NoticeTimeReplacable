@@ -87,7 +87,7 @@ if (typeof moment === 'function')
                 {
                     return formatMap[phpStr].call(that);
                 }
-                
+
                 return formatMap[phpStr];
             }));
         };
