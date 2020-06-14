@@ -19,7 +19,6 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
                 console.error('Timestamp is missing.');
                 return;
             }
-            this.options.timestamp = 1199145600;
 
             this.timer = setInterval(XF.proxy(this, 'updateTime'), 1000);
         },
