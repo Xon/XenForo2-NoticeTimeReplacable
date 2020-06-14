@@ -178,62 +178,6 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
                 timeArr.push(timePartStr);
             });
 
-            /*var yearPhrase = this.getDatePart(momentObj.years(), 'year');
-            if (typeof yearPhrase === 'string')
-            {
-                timeArr.push(yearPhrase);
-            }
-            else
-            {
-                return;
-            }
-
-            var monthPhrase = this.getDatePart(momentObj.months(), 'month');
-            if (typeof monthPhrase === 'string')
-            {
-                timeArr.push(monthPhrase);
-            }
-
-            var daysPhrase = this.getDatePart(momentObj.days(), 'day');
-            if (typeof daysPhrase === 'string')
-            {
-                timeArr.push(daysPhrase);
-            }
-            else
-            {
-                return;
-            }
-
-            var hoursPhrase = this.getDatePart(momentObj.hours(), 'hour');
-            if (typeof hoursPhrase === 'string')
-            {
-                timeArr.push(hoursPhrase);
-            }
-            else
-            {
-                return;
-            }
-
-            var minutesPhrase = this.getDatePart(momentObj.minutes(), 'minute');
-            if (typeof minutesPhrase === 'string')
-            {
-                timeArr.push(minutesPhrase);
-            }
-            else
-            {
-                return;
-            }
-
-            var secondsPhrase = this.getDatePart(momentObj.seconds(), 'second');
-            if (typeof secondsPhrase === 'string')
-            {
-                timeArr.push(secondsPhrase);
-            }
-            else
-            {
-                return;
-            }*/
-
             if (!timeArr.length)
             {
                 clearInterval(this.timer);
