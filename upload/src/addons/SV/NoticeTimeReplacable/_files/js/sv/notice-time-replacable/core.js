@@ -129,7 +129,8 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
 
         updateTime: function ()
         {
-            var now = Math.floor(Date.now() / 1000) * 1000,
+            var self = this,
+                now = Math.floor(Date.now() / 1000) * 1000,
                 end = this.options.timestamp * 1000,
                 momentObj,
                 timeArr = [];
@@ -165,7 +166,19 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
                 return;
             }
 
-            var yearPhrase = this.getDatePart(momentObj.years(), 'year');
+            var timePartStr;
+            $.each(['year', 'month', 'day', 'hour', 'minute', 'second'], function(index, type)
+            {
+                timePartStr = self.getDatePart(momentObj, type);
+                if (typeof timePartStr !== 'string')
+                {
+                    return;
+                }
+
+                timeArr.push(timePartStr);
+            });
+
+            /*var yearPhrase = this.getDatePart(momentObj.years(), 'year');
             if (typeof yearPhrase === 'string')
             {
                 timeArr.push(yearPhrase);
@@ -219,7 +232,7 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
             else
             {
                 return;
-            }
+            }*/
 
             if (!timeArr.length)
             {
@@ -231,16 +244,26 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
         },
 
         /**
-         * @param {Number|String} value
-         * @param {String} phrase
+         * @param {moment} momentObj
+         * @param {String} type
          */
-        getDatePart: function (value, phrase)
+        getDatePart: function (momentObj, type)
         {
-            if (typeof value === 'string')
+            if (typeof type !== 'string')
             {
-                value = parseInt(value) || 0;
+                console.error('Invalid date type provided.', type);
+                return false;
             }
-            phrase = 'svNoticeTimeReplacables_' + phrase + (value > 1 ? 's' : '');
+
+            var methodName = type + 's';
+            if (typeof momentObj[methodName] !== 'function')
+            {
+                console.error('Invalid date type provided.', type);
+                return false;
+            }
+
+            var value = parseInt(momentObj[methodName]()),
+                phrase = 'svNoticeTimeReplacables_' + type + (value > 1 ? 's' : '');
 
             return this.getPhrase(phrase, {
                 '{count}': value
