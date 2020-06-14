@@ -1,0 +1,9 @@
+{
+    "additional_files": [
+        "js/sv/notice-time-replacable"
+    ],
+    "minify": [
+        "js/sv/vendor/domurl/url.js",
+        "js/sv/notice-time-replacable/xf/filter.js"
+    ]
+}

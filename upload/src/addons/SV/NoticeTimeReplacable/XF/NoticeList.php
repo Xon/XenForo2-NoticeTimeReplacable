@@ -134,25 +134,37 @@ class NoticeList extends XFCP_NoticeList
         $this->appendDatePart($format, $interval->i, '%i ', 'minute');
         $this->appendDatePart($format, $interval->s, '%s ', 'second');
 
-        $f = intval($now->getTimestamp() - $other->getTimestamp());
-        if ($f)
+        $secondsDiff = intval($now->getTimestamp() - $other->getTimestamp());
+        if ($secondsDiff)
         {
-            foreach ($format as &$s)
+            foreach ($format as &$time)
             {
-                if (is_array($s))
+                if (is_array($time))
                 {
-                    $s = join($s);
+                    $time = join($time);
                 }
             }
-            $s = $interval->format(join(', ', $format));
+
+            $time = $interval->format(join(', ', $format));
         }
         else
         {
-            $s = '0 ' . \XF::phrase('time.seconds');
+            $time = '0 ' . \XF::phrase('time.seconds');
         }
 
-        return "<span class='time-notice' data-seconds-diff='{$f}'>" .
-               $s .
-               "</span>";
+        $templater = $this->app->templater();
+        foreach (['sv/vendor/moment/moment/moment.js', 'sv/notice-time-replacable/core.js'] AS $file)
+        {
+            $templater->includeJs([
+                'src'   => $file,
+                'addon' => 'SV/NoticeTimeReplacable',
+                'min'   => '1',
+            ]);
+        }
+
+        return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
+            'data-now="' . \XF::escapeString($now->getTimestamp()) . '" ' .
+            'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
+            'data-seconds-diff="' . $secondsDiff . '">' . \XF::escapeString($time) . '</span>';
     }
 }
