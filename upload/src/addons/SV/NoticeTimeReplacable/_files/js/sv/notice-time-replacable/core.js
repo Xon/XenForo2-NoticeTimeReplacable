@@ -36,18 +36,27 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
 
             if (typeof phrase !== 'string' || !phrase)
             {
-                console.error('Invalid phrase provided.');
+                console.error('Invalid phrase provided.', phrase);
                 clearInterval(this.timer);
                 return false;
             }
 
-            var translatedValue = XF.phrase('svNoticeTimeReplacables_' + phrase + (value > 1 ? 's' : ''), {
+            phrase = 'svNoticeTimeReplacables_' + phrase + (value > 1 ? 's' : '');
+            if (!(phrase in XF.phrases))
+            {
+                console.error('Phrase is not available.', phrase);
+                clearInterval(this.timer);
+                return false;
+            }
+
+            var translatedValue = XF.phrase(phrase, {
                 '{count}': value
             }, null);
 
             if (translatedValue === null)
             {
                 console.error('Invalid phrase provided.');
+                clearInterval(this.timer);
                 return false;
             }
 
@@ -81,39 +90,59 @@ SV.NoticeTimeReplacable = SV.NoticeTimeReplacable || {};
             }
 
             var yearPhrase = this.getDatePart(momentObj.years(), 'year');
-            if (yearPhrase)
+            if (typeof yearPhrase === 'string')
             {
                 timeArr.push(yearPhrase);
             }
+            else
+            {
+                return;
+            }
 
             var monthPhrase = this.getDatePart(momentObj.months(), 'month');
-            if (monthPhrase)
+            if (typeof monthPhrase === 'string')
             {
                 timeArr.push(monthPhrase);
             }
 
             var daysPhrase = this.getDatePart(momentObj.days(), 'day');
-            if (daysPhrase)
+            if (typeof daysPhrase === 'string')
             {
                 timeArr.push(daysPhrase);
             }
+            else
+            {
+                return;
+            }
 
             var hoursPhrase = this.getDatePart(momentObj.hours(), 'hour');
-            if (hoursPhrase)
+            if (typeof hoursPhrase === 'string')
             {
                 timeArr.push(hoursPhrase);
             }
+            else
+            {
+                return;
+            }
 
             var minutesPhrase = this.getDatePart(momentObj.minutes(), 'minute');
-            if (minutesPhrase)
+            if (typeof minutesPhrase === 'string')
             {
                 timeArr.push(minutesPhrase);
             }
+            else
+            {
+                return;
+            }
 
             var secondsPhrase = this.getDatePart(momentObj.seconds(), 'second');
-            if (secondsPhrase)
+            if (typeof secondsPhrase === 'string')
             {
                 timeArr.push(secondsPhrase);
+            }
+            else
+            {
+                return;
             }
 
             if (!timeArr.length)
