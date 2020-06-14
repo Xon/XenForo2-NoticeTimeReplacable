@@ -165,8 +165,8 @@ class NoticeList extends XFCP_NoticeList
         $language = \XF::language();
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
-            'data-date-format="' . $language->date_format . '" ' .
-            'data-time-format="' . $language->time_format . '" ' .
-            'data-seconds-diff="' . $secondsDiff . '">' . \XF::escapeString($time) . '</span>';
+            'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
+            'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .
+            'data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">' . \XF::escapeString($time) . '</span>';
     }
 }
