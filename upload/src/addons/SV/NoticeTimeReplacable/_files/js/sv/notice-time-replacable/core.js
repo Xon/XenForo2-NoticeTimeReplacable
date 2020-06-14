@@ -190,7 +190,7 @@ if (typeof moment === 'function')
 
             if (!timeArr.length)
             {
-                clearInterval(this.timer);
+                this.clearTimer();
                 return;
             }
 
