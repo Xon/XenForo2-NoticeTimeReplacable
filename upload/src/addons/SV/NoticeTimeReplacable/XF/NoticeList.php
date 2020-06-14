@@ -162,9 +162,11 @@ class NoticeList extends XFCP_NoticeList
             ]);
         }
 
+        $language = \XF::language();
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
-            'data-now="' . \XF::escapeString($now->getTimestamp()) . '" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
+            'data-date-format="' . $language->date_format . '" ' .
+            'data-time-format="' . $language->time_format . '" ' .
             'data-seconds-diff="' . $secondsDiff . '">' . \XF::escapeString($time) . '</span>';
     }
 }
