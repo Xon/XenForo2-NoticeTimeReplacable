@@ -87,8 +87,7 @@ if (typeof moment === 'function')
                 {
                     return formatMap[phpStr].call(that);
                 }
-
-                console.log(phpStr + '==>' + formatMap[phpStr]);
+                
                 return formatMap[phpStr];
             }));
         };
