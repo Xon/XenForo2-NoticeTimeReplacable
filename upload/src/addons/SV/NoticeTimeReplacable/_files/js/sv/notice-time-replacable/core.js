@@ -150,6 +150,8 @@ if (typeof moment === 'function')
             }
             else
             {
+                this.clearTimer();
+
                 var $noticeContent = this.$target.closest('.notice-content'),
                     $noticeDismissButton = $noticeContent.length() ? $noticeContent.find('.notice-dismiss') : null;
 
@@ -169,8 +171,7 @@ if (typeof moment === 'function')
                     return;
                 }
 
-                this.$target.text();
-                this.clearTimer();
+                this.$target.text(fullEnd);
 
                 return;
             }
