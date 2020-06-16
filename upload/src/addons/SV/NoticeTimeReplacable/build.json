@@ -3,6 +3,6 @@
         "js/sv/notice-time-replacable"
     ],
     "minify": [
-        "js/sv/notice-time-replacable/xf/filter.js"
+        "js/sv/notice-time-replacable/core.js"
     ]
 }
