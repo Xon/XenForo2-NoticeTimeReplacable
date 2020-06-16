@@ -7,6 +7,11 @@ class NoticeList extends XFCP_NoticeList
     /** @var null|int */
     protected $svNow = null;
 
+    /**
+     * This entire block is pre-XF2.1.4 bugfix
+     *
+     * @return array
+     */
     protected function getTokens()
     {
         $tokens = parent::getTokens();
@@ -107,9 +112,9 @@ class NoticeList extends XFCP_NoticeList
         {
             $format[] = \XF::phrase('time.' . $phrase . 's', ['count' => $value]);
         }
-        else if ($value < 0)
+        else if ($value <= 0)
         {
-            $format[] = [$formatString, \XF::phrase($phrase)];
+            $format[] = [$formatString, \XF::phrase('time' . $phrase)];
         }
     }
 
@@ -120,6 +125,7 @@ class NoticeList extends XFCP_NoticeList
      */
     public function getRelativeDate(\DateTime $now, \DateTime $other)
     {
+        $language = \XF::language();
         $interval = $other->diff($now);
         if (!$interval)
         {
@@ -149,7 +155,8 @@ class NoticeList extends XFCP_NoticeList
         }
         else
         {
-            $time = '0 ' . \XF::phrase('time.seconds');
+            return '<span class="time-notice" data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">'
+                . \XF::escapeString($language->dateTime($other->getTimestamp())) . '</span>';
         }
 
         $templater = $this->app->templater();
@@ -162,7 +169,6 @@ class NoticeList extends XFCP_NoticeList
             ]);
         }
 
-        $language = \XF::language();
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
