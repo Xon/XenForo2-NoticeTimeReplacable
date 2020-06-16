@@ -111,6 +111,7 @@ class NoticeList extends XFCP_NoticeList
      */
     public function getRelativeDate(\DateTime $now, \DateTime $other)
     {
+        $language = \XF::language();
         $interval = $other->diff($now);
         if (!$interval)
         {
@@ -154,7 +155,6 @@ class NoticeList extends XFCP_NoticeList
             ]);
         }
 
-        $language = \XF::language();
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
