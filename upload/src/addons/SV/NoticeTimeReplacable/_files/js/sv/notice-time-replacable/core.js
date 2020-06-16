@@ -219,6 +219,12 @@ if (typeof moment === 'function')
             var value = parseInt(momentObj[methodName]()),
                 phrase = 'svNoticeTimeReplacables_' + type + (value > 1 ? 's' : '');
 
+            // skip zero items
+            if (!value)
+            {
+                return false;
+            }
+
             return this.getPhrase(phrase, {
                 '{count}': value
             });
