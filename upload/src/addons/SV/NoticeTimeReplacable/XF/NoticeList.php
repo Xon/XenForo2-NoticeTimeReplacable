@@ -7,6 +7,15 @@ class NoticeList extends XFCP_NoticeList
     /** @var null|int */
     protected $svNow = null;
 
+    protected function getTokens()
+    {
+        $tokens = parent::getTokens();
+
+        $tokens['{user_id}'] = $this->user->user_id;
+
+        return $tokens;
+    }
+
     /**
      * @param string $key
      * @param string $type
