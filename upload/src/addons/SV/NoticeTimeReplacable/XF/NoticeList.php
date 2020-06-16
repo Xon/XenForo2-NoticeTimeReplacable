@@ -149,7 +149,8 @@ class NoticeList extends XFCP_NoticeList
         }
         else
         {
-            $time = '0 ' . \XF::phrase('time.seconds');
+            return '<span class="time-notice" data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">'
+                . \XF::escapeString($language->dateTime($other->getTimestamp())) . '</span>';
         }
 
         $templater = $this->app->templater();
