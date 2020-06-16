@@ -114,7 +114,7 @@ class NoticeList extends XFCP_NoticeList
         }
         else if ($value <= 0)
         {
-            $format[] = [$formatString, \XF::phrase('time' . $phrase)];
+            $format[] = [$formatString, \XF::phrase('time.' . $phrase)];
         }
     }
 
