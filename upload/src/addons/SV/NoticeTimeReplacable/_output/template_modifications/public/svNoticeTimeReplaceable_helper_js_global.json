@@ -1,0 +1,9 @@
+{
+    "template": "helper_js_global",
+    "description": "Add phrases required for",
+    "execution_order": 6627,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "// <!--[XF:js_global:xf_phrase_start]-->",
+    "replace": "$0\n\t\t\tsvNoticeTimeReplacables_second: \"{{ phrase('time.second')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_seconds: \"{{ phrase('time.seconds')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_minute: \"{{ phrase('time.minute')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_minutes: \"{{ phrase('time.minutes')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_hour: \"{{ phrase('time.hour')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_hours: \"{{ phrase('time.hours')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_day: \"{{ phrase('time.day')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_days: \"{{ phrase('time.days')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_week: \"{{ phrase('time.week')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_weeks: \"{{ phrase('time.weeks')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_month: \"{{ phrase('time.month')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_months: \"{{ phrase('time.months')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_year: \"{{ phrase('time.year')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_years: \"{{ phrase('time.years')|escape('js') }}\",\n\t\t\tsvNoticeTimeReplacables_date_x_at_time_y: \"{{ phrase('date_x_at_time_y')|escape('js') }}\",\n"
+}
