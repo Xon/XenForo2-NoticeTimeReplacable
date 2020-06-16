@@ -2,7 +2,7 @@
     "legacy_addon_id": "SV_NoticeTime",
     "title": "Notice Time Replaceables",
     "description": "Adds replacables to expose the start/end time of a notice.",
-    "version_id": 2010100,
+    "version_id": 2010101,
     "version_string": "2.1.1",
     "dev" : "Xon",
     "dev_url": "https://atelieraphelion.com/",

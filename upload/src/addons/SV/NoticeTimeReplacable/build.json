@@ -1,5 +1,6 @@
 {
     "additional_files": [
+        "js/sv/vendor",
         "js/sv/notice-time-replacable"
     ],
     "minify": [
