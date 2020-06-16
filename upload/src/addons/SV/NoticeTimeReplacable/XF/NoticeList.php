@@ -42,12 +42,12 @@ class NoticeList extends XFCP_NoticeList
             switch ($criterion['rule'])
             {
                 case 'after':
-                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
+                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion, true);
                     $tokens['{time_start:absolute}'] = $absolute;
                     $tokens['{time_start:relative}'] = $relative;
                     break;
                 case 'before':
-                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion);
+                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion, false);
                     $tokens['{time_end:absolute}'] = $absolute;
                     $tokens['{time_end:relative}'] = $relative;
                     break;
@@ -66,9 +66,10 @@ class NoticeList extends XFCP_NoticeList
 
     /**
      * @param array $criterion
+     * @param bool  $countingUp
      * @return array
      */
-    protected function getAbsoluteRelativeTimeDiff(array $criterion)
+    protected function getAbsoluteRelativeTimeDiff(array $criterion, $countingUp)
     {
         $ymd = $criterion['data']['ymd'];
         $timeHour = $criterion['data']['hh'];
@@ -90,7 +91,7 @@ class NoticeList extends XFCP_NoticeList
         }
 
         $absolute = \XF::language()->dateTime($timeStamp->getTimestamp());
-        $relative = $this->getRelativeDate($this->svNow, $timeStamp);
+        $relative = $this->getRelativeDate($this->svNow, $timeStamp, $countingUp);
 
         return [$absolute, $relative];
     }
@@ -121,9 +122,10 @@ class NoticeList extends XFCP_NoticeList
     /**
      * @param \DateTime $now
      * @param \DateTime $other
+     * @param bool      $countingUp
      * @return string
      */
-    public function getRelativeDate(\DateTime $now, \DateTime $other)
+    public function getRelativeDate(\DateTime $now, \DateTime $other, $countingUp)
     {
         $language = \XF::language();
         $interval = $other->diff($now);
@@ -131,7 +133,7 @@ class NoticeList extends XFCP_NoticeList
         {
             return '';
         }
-
+//countUp
         $format = [];
         $this->appendDatePart($format, $interval->y, '%y ', 'year');
         $this->appendDatePart($format, $interval->m, '%m ', 'month');
@@ -170,6 +172,7 @@ class NoticeList extends XFCP_NoticeList
         }
 
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
+            'data-count-up="' . ($countingUp ? '1' : '0') . '" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
             'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .

@@ -100,6 +100,7 @@ if (typeof moment === 'function')
 
     SV.NoticeTimeReplacable.RelativeTimestamp = XF.Element.newHandler({
         options: {
+            countUp: 0,
             timestamp: null,
             dateFormat: null,
             timeFormat: null
@@ -148,12 +149,16 @@ if (typeof moment === 'function')
             {
                 momentObj = moment.duration(end - now, 'milliseconds');
             }
+            else if (this.options.countUp)
+            {
+                momentObj = moment.duration(now - end, 'milliseconds');
+            }
             else
             {
                 this.clearTimer();
 
                 var $noticeContent = this.$target.closest('.notice-content'),
-                    $noticeDismissButton = $noticeContent.length() ? $noticeContent.find('.notice-dismiss') : null;
+                    $noticeDismissButton = $noticeContent.length ? $noticeContent.find('.notice-dismiss') : null;
 
                 if ($noticeDismissButton.length)
                 {
@@ -273,6 +278,7 @@ if (typeof moment === 'function')
             if (this.timer)
             {
                 clearInterval(this.timer);
+                this.timer = null;
             }
         }
     });
