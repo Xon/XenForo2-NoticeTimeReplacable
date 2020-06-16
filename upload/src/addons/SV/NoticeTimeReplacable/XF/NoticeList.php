@@ -7,6 +7,11 @@ class NoticeList extends XFCP_NoticeList
     /** @var null|int */
     protected $svNow = null;
 
+    /**
+     * This entire block is pre-XF2.1.4 bugfix
+     *
+     * @return array
+     */
     protected function getTokens()
     {
         $tokens = parent::getTokens();
