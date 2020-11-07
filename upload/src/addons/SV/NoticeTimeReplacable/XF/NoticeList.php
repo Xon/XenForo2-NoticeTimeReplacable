@@ -96,83 +96,48 @@ class NoticeList extends XFCP_NoticeList
         return [$absolute, $relative];
     }
 
-    /**
-     * @param array  $format
-     * @param int    $value
-     * @param string $formatString
-     * @param string $phrase
-     */
-    protected function appendDatePart(&$format, $value, $formatString, $phrase)
-    {
-        $value = (int)$value;
-        if ($value === 1)
-        {
-            $format[] = \XF::phrase('time.' . $phrase, ['count' => $value]);
-        }
-        else if ($value > 1)
-        {
-            $format[] = \XF::phrase('time.' . $phrase . 's', ['count' => $value]);
-        }
-        else if ($value < 0)
-        {
-            $format[] = [$formatString, \XF::phrase('time.' . $phrase)];
-        }
-    }
 
     /**
      * @param \DateTime $now
      * @param \DateTime $other
-     * @param bool      $countingUp
+     * @param bool      $countUp
      * @return string
      */
-    public function getRelativeDate(\DateTime $now, \DateTime $other, $countingUp)
+    protected function getRelativeDate(\DateTime $now, \DateTime $other, bool $countUp)
     {
+        $otherTimestamp = $other->getTimestamp();
+        $nowTimestamp = $now->getTimestamp();
+        $secondsDiff = $nowTimestamp - $otherTimestamp;
+
+        $repo = \SV\StandardLib\Helper::repo();
+        $interval = $repo->momentJsCompatibleTimeDiff($nowTimestamp, $otherTimestamp);
         $language = \XF::language();
-        $interval = $other->diff($now);
-        if (!$interval)
-        {
-            return '';
-        }
-//countUp
-        $format = [];
-        $this->appendDatePart($format, $interval->y, '%y ', 'year');
-        $this->appendDatePart($format, $interval->m, '%m ', 'month');
-        $this->appendDatePart($format, $interval->d, '%d ', 'day');
-        $this->appendDatePart($format, $interval->h, '%h ', 'hour');
-        $this->appendDatePart($format, $interval->i, '%i ', 'minute');
-        $this->appendDatePart($format, $interval->s, '%s ', 'second');
 
-        $secondsDiff = intval($now->getTimestamp() - $other->getTimestamp());
-        if ($secondsDiff)
+        if (isset($interval['invert']) && (!$countUp && !$interval['invert'] || $countUp && $interval['invert']))
         {
-            foreach ($format as &$time)
-            {
-                if (is_array($time))
-                {
-                    $time = join($time);
-                }
-            }
-
-            $time = $interval->format(join(', ', $format));
+            $dateArr = $repo->buildRelativeDateString($interval, 0);
+            $time = \implode(', ', $dateArr);
         }
         else
         {
             return '<span class="time-notice" data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">'
-                . \XF::escapeString($language->dateTime($other->getTimestamp())) . '</span>';
+                . \XF::escapeString($language->dateTime($otherTimestamp)) . '</span>';
         }
 
         $templater = $this->app->templater();
-        foreach (['sv/vendor/moment/moment/moment.js', 'sv/notice-time-replacable/core.js'] AS $file)
-        {
-            $templater->includeJs([
-                'src'   => $file,
-                'addon' => 'SV/NoticeTimeReplacable',
-                'min'   => '1',
-            ]);
-        }
+        $templater->includeJs([
+            'src'   => 'sv/vendor/moment/moment.js',
+            'addon' => 'SV/StandardLib',
+            'min'   => '1',
+        ]);
+        $templater->includeJs([
+            'src'   => 'sv/notice-time-replacable/core.js',
+            'addon' => 'SV/NoticeTimeReplacable',
+            'min'   => '1',
+        ]);
 
         return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
-            'data-count-up="' . ($countingUp ? '1' : '0') . '" ' .
+            'data-count-up="' . ($countUp ? '1' : '0') . '" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
             'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .
