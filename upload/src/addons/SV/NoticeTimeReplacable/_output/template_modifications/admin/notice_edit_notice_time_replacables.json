@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "phrase('the_message_to_be_shown_when_the_display_criteria_are_met')",
-    "replace": "$0\n. phrase('sv_notice_time_replacable_tags')"
+    "replace": "$0\n. phrase('svNoticeTime_replacable_tags')"
 }
