@@ -107,7 +107,6 @@ class NoticeList extends XFCP_NoticeList
     {
         $otherTimestamp = $other->getTimestamp();
         $nowTimestamp = $now->getTimestamp();
-        $secondsDiff = $nowTimestamp - $otherTimestamp;
 
         $repo = \SV\StandardLib\Helper::repo();
         $interval = $repo->momentJsCompatibleTimeDiff($nowTimestamp, $otherTimestamp);
@@ -117,30 +116,30 @@ class NoticeList extends XFCP_NoticeList
         {
             $dateArr = $repo->buildRelativeDateString($interval, 0);
             $time = \implode(', ', $dateArr);
+
+            $xfInit = 'sv-notice-time-replacable--relative-timestamp';
+            $templater = $this->app->templater();
+            $templater->includeJs([
+                'src'   => 'sv/vendor/moment/moment.js',
+                'addon' => 'SV/StandardLib',
+                'min'   => '1',
+            ]);
+            $templater->includeJs([
+                'src'   => 'sv/notice-time-replacable/core.js',
+                'addon' => 'SV/NoticeTimeReplacable',
+                'min'   => '1',
+            ]);
         }
         else
         {
-            return '<span class="time-notice" data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">'
-                . \XF::escapeString($language->dateTime($otherTimestamp)) . '</span>';
+            $xfInit = '';
         }
 
-        $templater = $this->app->templater();
-        $templater->includeJs([
-            'src'   => 'sv/vendor/moment/moment.js',
-            'addon' => 'SV/StandardLib',
-            'min'   => '1',
-        ]);
-        $templater->includeJs([
-            'src'   => 'sv/notice-time-replacable/core.js',
-            'addon' => 'SV/NoticeTimeReplacable',
-            'min'   => '1',
-        ]);
-
-        return '<span class="time-notice" data-xf-init="sv-notice-time-replacable--relative-timestamp" ' .
+        return '<span class="time-notice" data-xf-init="' . $xfInit . '" ' .
             'data-count-up="' . ($countUp ? '1' : '0') . '" ' .
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
             'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .
-            'data-seconds-diff="' . \XF::escapeString($secondsDiff) . '">' . \XF::escapeString($time) . '</span>';
+            '>' . \XF::escapeString($time) . '</span>';
     }
 }
