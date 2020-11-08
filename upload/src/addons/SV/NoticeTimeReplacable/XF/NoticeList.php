@@ -108,7 +108,7 @@ class NoticeList extends XFCP_NoticeList
         $func = \XF::$versionId >= 2010370 ? 'func' : 'fn';
 
         return $this->app->templater()->$func('sv_relative_timestamp', [
-            $now, $other, // now and other date time obj
+            $now->getTimestamp(), $other->getTimestamp(), // now and other date time obj
             0, $countUp, // maximum date parts and if allowed counting up
             'time-notice', // class added to the span
             'click', '< .notice-content | .notice-dismiss' // event to trigger and who trigger it on
