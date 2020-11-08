@@ -109,7 +109,7 @@ class NoticeList extends XFCP_NoticeList
 
         return $this->app->templater()->$func(
             'sv_relative_timestamp',
-            [$now, $other, $countUp, 'time-notice']
+            [$now, $other, 0, $countUp, 'time-notice']
         );
     }
 }
