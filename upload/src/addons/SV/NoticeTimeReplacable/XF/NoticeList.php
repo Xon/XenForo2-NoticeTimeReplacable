@@ -105,37 +105,11 @@ class NoticeList extends XFCP_NoticeList
      */
     protected function getRelativeDate(\DateTime $now, \DateTime $other, bool $countUp)
     {
-        $otherTimestamp = $other->getTimestamp();
-        $nowTimestamp = $now->getTimestamp();
+        $func = \XF::$versionId >= 2010370 ? 'func' : 'fn';
 
-        $repo = \SV\StandardLib\Helper::repo();
-        $interval = $repo->momentJsCompatibleTimeDiff($nowTimestamp, $otherTimestamp);
-        $language = \XF::language();
-
-        if (isset($interval['invert']) && (!$countUp && !$interval['invert'] || $countUp && $interval['invert']))
-        {
-            $dateArr = $repo->buildRelativeDateString($interval, 0);
-            $time = \implode(', ', $dateArr);
-
-            $xfInit = 'sv-standard-lib--relative-timestamp';
-            $templater = $this->app->templater();
-            $templater->renderMacro(
-                'public:svStandardLib_relative_timestamp_macros',
-                'prerequisites'
-            );
-        }
-        else
-        {
-            $xfInit = '';
-        }
-
-        return '<span class="time-notice" data-xf-init="' . $xfInit . '" ' .
-            'data-count-up="' . ($countUp ? '1' : '0') . '" ' .
-            'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
-            'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
-            'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .
-            'data-trigger-event="click" ' .
-            'data-trigger-event-on-selector="< .notice-content | .notice-dismiss"' .
-            '>' . \XF::escapeString($time) . '</span>';
+        return $this->app->templater()->$func(
+            'sv_relative_timestamp',
+            [$now, $other, $countUp, 'time-notice']
+        );
     }
 }
