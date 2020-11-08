@@ -117,18 +117,12 @@ class NoticeList extends XFCP_NoticeList
             $dateArr = $repo->buildRelativeDateString($interval, 0);
             $time = \implode(', ', $dateArr);
 
-            $xfInit = 'sv-notice-time-replacable--relative-timestamp';
+            $xfInit = 'sv-standard-lib--relative-timestamp';
             $templater = $this->app->templater();
-            $templater->includeJs([
-                'src'   => 'sv/vendor/moment/moment.js',
-                'addon' => 'SV/StandardLib',
-                'min'   => '1',
-            ]);
-            $templater->includeJs([
-                'src'   => 'sv/notice-time-replacable/core.js',
-                'addon' => 'SV/NoticeTimeReplacable',
-                'min'   => '1',
-            ]);
+            $templater->renderMacro(
+                'public:svStandardLib_relative_timestamp_macros',
+                'prerequisites'
+            );
         }
         else
         {
@@ -140,6 +134,8 @@ class NoticeList extends XFCP_NoticeList
             'data-timestamp="' . \XF::escapeString($other->getTimestamp()) . '" ' .
             'data-date-format="' . \XF::escapeString($language->date_format) . '" ' .
             'data-time-format="' . \XF::escapeString($language->time_format) . '" ' .
+            'data-trigger-event="click" ' .
+            'data-trigger-event-on-selector="< .notice-content | .notice-dismiss"' .
             '>' . \XF::escapeString($time) . '</span>';
     }
 }
