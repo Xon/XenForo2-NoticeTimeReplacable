@@ -10,9 +10,18 @@
     "support_url": "https://xenforo.com/community/resources/notice-time-replacables.6627/",
     "extra_urls": [],
     "require": {
-        "XF": [2010070, "XenForo 2.1.0+"],
-        "php": ["7.2.0", "PHP 7.2.0+"],
-        "SV/StandardLib": [1040010,"Standard Library by Xon v1.4.0+"]
+        "SV/StandardLib": [
+            2001190000,
+            "Standard Library by Xon v1.19.0+"
+        ],
+        "XF": [
+            "2.2.0",
+            "XenForo 2.2.0+"
+        ],
+        "php": [
+            "7.2.0",
+            "PHP 7.2.0+"
+        ]
     },
     "icon": ""
 }

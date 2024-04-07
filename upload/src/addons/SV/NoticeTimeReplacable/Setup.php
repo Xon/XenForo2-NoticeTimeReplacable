@@ -15,7 +15,7 @@ class Setup extends AbstractSetup
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
-    public function upgrade2020000Step1()
+    public function upgrade2020000Step1(): void
     {
         $this->renamePhrases([
             'sv_notice_time_replacable_tags' => 'svNoticeTime_replacable_tags',

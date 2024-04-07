@@ -2,24 +2,13 @@
 
 namespace SV\NoticeTimeReplacable\XF;
 
+/**
+ * @extends \XF\NoticeList
+ */
 class NoticeList extends XFCP_NoticeList
 {
     /** @var null|int */
     protected $svNow = null;
-
-    /**
-     * This entire block is pre-XF2.1.4 bugfix
-     *
-     * @return array
-     */
-    protected function getTokens()
-    {
-        $tokens = parent::getTokens();
-
-        $tokens['{user_id}'] = $this->user->user_id;
-
-        return $tokens;
-    }
 
     /**
      * @param string $key
@@ -37,17 +26,17 @@ class NoticeList extends XFCP_NoticeList
         }
 
         $tokens = [];
-        foreach ($override['page_criteria'] AS $criterion)
+        foreach ($override['page_criteria'] as $criterion)
         {
             switch ($criterion['rule'])
             {
                 case 'after':
-                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion, true);
+                    [$absolute, $relative] = $this->getAbsoluteRelativeTimeDiff($criterion, true);
                     $tokens['{time_start:absolute}'] = $absolute;
                     $tokens['{time_start:relative}'] = $relative;
                     break;
                 case 'before':
-                    list($absolute, $relative) = $this->getAbsoluteRelativeTimeDiff($criterion, false);
+                    [$absolute, $relative] = $this->getAbsoluteRelativeTimeDiff($criterion, false);
                     $tokens['{time_end:absolute}'] = $absolute;
                     $tokens['{time_end:relative}'] = $relative;
                     break;
@@ -64,12 +53,7 @@ class NoticeList extends XFCP_NoticeList
         }
     }
 
-    /**
-     * @param array $criterion
-     * @param bool  $countingUp
-     * @return array
-     */
-    protected function getAbsoluteRelativeTimeDiff(array $criterion, $countingUp)
+    protected function getAbsoluteRelativeTimeDiff(array $criterion, bool $countingUp): array
     {
         $ymd = $criterion['data']['ymd'];
         $timeHour = $criterion['data']['hh'];
@@ -96,18 +80,9 @@ class NoticeList extends XFCP_NoticeList
         return [$absolute, $relative];
     }
 
-
-    /**
-     * @param \DateTime $now
-     * @param \DateTime $other
-     * @param bool      $countUp
-     * @return string
-     */
-    protected function getRelativeDate(\DateTime $now, \DateTime $other, bool $countUp)
+    protected function getRelativeDate(\DateTime $now, \DateTime $other, bool $countUp): string
     {
-        $func = \XF::$versionId >= 2010370 ? 'func' : 'fn';
-
-        return $this->app->templater()->$func('sv_relative_timestamp', [
+        return $this->app->templater()->func('sv_relative_timestamp', [
             $now->getTimestamp(), $other->getTimestamp(), // now and other date time obj
             0, $countUp, // maximum date parts and if allowed counting up
             'time-notice', // class added to the span
