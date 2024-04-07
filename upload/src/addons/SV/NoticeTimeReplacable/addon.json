@@ -8,7 +8,10 @@
     "dev_url": "https://atelieraphelion.com/",
     "faq_url": "",
     "support_url": "https://xenforo.com/community/resources/notice-time-replacables.6627/",
-    "extra_urls": [],
+    "extra_urls": {
+        "License": "https://atelieraphelion.com/products/notice-time-replacables.223/copyright",
+        "Add-on site": "https://atelieraphelion.com/notice-time-replacables.223/",
+    },
     "require": {
         "SV/StandardLib": [
             2001190000,
