@@ -3,19 +3,19 @@
     "title": "Notice Time Replaceables",
     "description": "Adds replacables to expose the start/end time of a notice.",
     "version_id": 1712492670,
-    "version_string": "2.3.0",
+    "version_string": "2.3.1",
     "dev": "Xon",
     "dev_url": "https://atelieraphelion.com/",
     "faq_url": "",
     "support_url": "https://xenforo.com/community/resources/notice-time-replacables.6627/",
     "extra_urls": {
         "License": "https://atelieraphelion.com/products/notice-time-replacables.223/copyright",
-        "Add-on site": "https://atelieraphelion.com/notice-time-replacables.223/"
+        "Add-on site": "https://atelieraphelion.com/products/notice-time-replacables.223/"
     },
     "require": {
         "SV/StandardLib": [
-            2001190000,
-            "Standard Library by Xon v1.19.0+"
+            2001210000,
+            "Standard Library by Xon v1.21.0+"
         ],
         "XF": [
             "2.2.0",
