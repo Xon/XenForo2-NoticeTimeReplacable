@@ -1,0 +1,1 @@
+0 = dynamically show date-time parts with values. Except seconds if "Notice relative time - Show seconds" is not set.

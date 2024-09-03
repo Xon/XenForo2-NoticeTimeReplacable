@@ -2,8 +2,8 @@
     "legacy_addon_id": "SV_NoticeTime",
     "title": "Notice Time Replaceables",
     "description": "Adds replacables to expose the start/end time of a notice.",
-    "version_id": 1712492670,
-    "version_string": "2.3.1",
+    "version_id": 1725335172,
+    "version_string": "2.4.0",
     "dev": "Xon",
     "dev_url": "https://atelieraphelion.com/",
     "faq_url": "",
@@ -24,6 +24,12 @@
         "php": [
             "7.2.0",
             "PHP 7.2.0+"
+        ]
+    },
+    "require-soft": {
+        "SV/StandardLib": [
+            2001210900,
+            "Standard Library by Xon v1.21.9+"
         ]
     },
     "icon": ""

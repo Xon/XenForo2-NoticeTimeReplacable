@@ -82,11 +82,15 @@ class NoticeList extends XFCP_NoticeList
 
     protected function getRelativeDate(\DateTime $now, \DateTime $other, bool $countUp): string
     {
+        $partCount = (int)(\XF::options()->svNoticeTimeDateParts ?? 0);
+        $showSeconds = (bool)(\XF::options()->svNoticeTimeShowSeconds ?? false);
+
         return $this->app->templater()->func('sv_relative_timestamp', [
             $now->getTimestamp(), $other->getTimestamp(), // now and other date time obj
-            0, $countUp, // maximum date parts and if allowed counting up
+            $partCount, $countUp, // maximum date parts and if allowed counting up
             'time-notice', // class added to the span
-            'click', '< .notice-content | .notice-dismiss' // event to trigger and who trigger it on
+            'click', '< .notice-content | .notice-dismiss', // event to trigger and who trigger it on
+            $showSeconds,
         ]);
     }
 }
